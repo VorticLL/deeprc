@@ -1,2 +1,3 @@
 # deeprc
-Thanks for reading me
+
+An attempt at programming an RC vehicle 
