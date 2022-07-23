@@ -6,19 +6,18 @@
 #include <Servo.h>
 int DIR_L = 12;
 int PWM_L = 3;
-int BRAKE_L = 9;
 
 int DIR_R = 13;
 int PWM_R = 11;
-int BRAKE_R = 8;
+
 String Command;
 Servo servo;
 
 //TO-DO: change pin numbers
-int echoPinR = 2;
-int trigPinR = 3;
-int echoPinL = 4;
-int trigPinL = 5;
+int echoPinL = 2;
+int trigPinL = 6;
+int echoPinR = 4;
+int trigPinR = 5;
 
 int distanceL, distanceR;
 long durationL, durationR;
@@ -30,11 +29,11 @@ void setup() {
   Serial.begin(9600);           //Initializing the Serial Port to Baud rate 9600
   pinMode(DIR_L, OUTPUT);
   pinMode(PWM_L, OUTPUT);
-  pinMode(BRAKE_L, OUTPUT);
+//  pinMode(BRAKE_L, OUTPUT);
 
   pinMode(DIR_R, OUTPUT);
   pinMode(PWM_R, OUTPUT);
-  pinMode(BRAKE_R, OUTPUT);
+//  pinMode(BRAKE_R, OUTPUT);
 
 
   servo.attach(9); //TO-DO: change port number
@@ -71,9 +70,9 @@ int distL() {
   // Calculating the distance
   distanceL = durationL * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
   // Displays the distance on the Serial Monitor
-  //  Serial.print("Distance Left: ");
-  //  Serial.print(distanceL);
-  //  Serial.println(" cm");
+//  Serial.print("Distance Left: ");
+//  Serial.print(distanceL);
+//  Serial.println(" cm");
   return distanceL;
 }
 
@@ -90,11 +89,12 @@ int distR() {
   // Calculating the distance
   distanceR = durationR * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
   // Displays the distance on the Serial Monitor
-  //  Serial.print("Distance Right: ");
-  //  Serial.print(distanceR);
-  //  Serial.println(" cm");
+//  Serial.print("Distance Right: ");
+//  Serial.print(distanceR);
+//  Serial.println(" cm");
   return distanceR;
 }
+
 
 void EnterCommand(String Command) {
   float angle = float(Command.substring(0, 3).toInt());     //firt get the abc numbers out of the command and then convert to integer.
@@ -152,9 +152,9 @@ void EnterCommand(String Command) {
     digitalWrite(DIR_R, LOW);
   }
 
-  if (button == 3) {
-    autoMode(angle);
-  }
+//  if (button == 3) {
+//    autoMode(angle);
+//  }
 
   // Next set speed:
   servo.write(servoAngle(angle));
@@ -171,24 +171,24 @@ float servoAngle(float angle) {
 
 void autoMode(float angle) {
   while(true) {
-    if (distL() < 10 && distR() < 10) {
+    if (distL() < 5 && distR() < 5) {
       digitalWrite(DIR_L, HIGH);
       digitalWrite(DIR_R, HIGH);
       angle = 90.0;
     }
-    else if (distL() < 10 && distR() > 10) {
-      Serial.println("turn left");
+    else if (distL() < 5 && distR() > 5) {
+//      Serial.println("turn left");
       digitalWrite(DIR_L, LOW);
       digitalWrite(DIR_R, HIGH);
       angle = 180.0;
     }
-    else if (distL() > 10 && distR() < 10) {
-      Serial.println("turn right");
+    else if (distL() > 5 && distR() < 5) {
+//      Serial.println("turn right");
       digitalWrite(DIR_L, HIGH);
       digitalWrite(DIR_R, LOW);
       angle = 0.0;
     }
-    else Serial.println("???");
+//    else Serial.println("???");
 
 
     servo.write(servoAngle(angle));
